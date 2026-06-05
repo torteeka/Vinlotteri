@@ -66,16 +66,10 @@ function HostPage({ state, dispatch, setRoute, showToast }) {
         
         <div className="card" style={hostStyles.hero}>
           <div style={hostStyles.heroLeft}>
-            <LabelTop>Sur Rendez-vous</LabelTop>
             <div className="script" style={hostStyles.script}>Next up</div>
             <div style={hostStyles.bigName}>{nextHost?.name || "—"}</div>
             <div className="muted" style={{ fontSize: 16, marginTop: 12 }}>
               {fmtDateLong(nextFri)} · After the weekly meeting
-            </div>
-          </div>
-          <div style={hostStyles.heroRight}>
-            <div style={{ width: 180, position: "relative", color: nextHost ? `oklch(0.42 0.12 ${avatarHue(nextHost.id)})` : "var(--accent)" }}>
-              <BottleSVG winnerName={nextHost?.name.split(" ")[0] || ""} />
             </div>
           </div>
         </div>
