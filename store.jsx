@@ -7,7 +7,9 @@ const STORAGE_KEY = "vinlotteri.v1";
 const ONE_DAY = 86400000;
 
 function dateOnly(d) {
-  const x = new Date(d);
+  const x = (typeof d === "string" && /^\d{4}-\d{2}-\d{2}$/.test(d))
+    ? new Date(+d.slice(0,4), +d.slice(5,7) - 1, +d.slice(8,10))
+    : new Date(d);
   x.setHours(0, 0, 0, 0);
   return x;
 }
@@ -15,10 +17,13 @@ function dateOnly(d) {
 function thisFriday(from = new Date()) {
   const d = dateOnly(from);
   const offset = (5 - d.getDay() + 7) % 7;
-  return new Date(d.getTime() + offset * ONE_DAY);
+  d.setDate(d.getDate() + offset);
+  return d;
 }
 function addWeeks(d, n) {
-  return new Date(dateOnly(d).getTime() + n * 7 * ONE_DAY);
+  const x = dateOnly(d);
+  x.setDate(x.getDate() + n * 7);
+  return x;
 }
 function isoDate(d) {
   const x = dateOnly(d);
@@ -34,11 +39,11 @@ const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov
 const MONTHS_LONG = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const DAYS_LONG = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 function fmtDate(d) {
-  const x = new Date(d);
+  const x = dateOnly(d);
   return `${x.getDate()} ${MONTHS[x.getMonth()]} ${x.getFullYear()}`;
 }
 function fmtDateLong(d) {
-  const x = new Date(d);
+  const x = dateOnly(d);
   return `${DAYS_LONG[x.getDay()]}, ${x.getDate()} ${MONTHS_LONG[x.getMonth()]}`;
 }
 
