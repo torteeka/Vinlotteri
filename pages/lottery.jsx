@@ -288,9 +288,11 @@ function LotteryPage({ state, dispatch, setRoute, showToast }) {
     setHotCell(null);
   };
 
+  const startRollRef = React.useRef(startRoll);
+  startRollRef.current = startRoll;
   const rollAgain = () => {
     closeReveal();
-    setTimeout(startRoll, 350);
+    setTimeout(() => startRollRef.current(), 350);
   };
 
   const resetWeek = () => {
@@ -414,26 +416,6 @@ function LotteryPage({ state, dispatch, setRoute, showToast }) {
         } />
       
 
-      {/* Winners summary */}
-      {winnersList.length > 0 &&
-      <div style={{ marginBottom: 18 }}>
-        <div className="card" style={{ display: "flex", alignItems: "center", gap: 16, background: "color-mix(in oklab, var(--gold) 8%, var(--paper))" }}>
-            <span className="eyebrow" style={{ color: "color-mix(in oklab, var(--gold) 60%, var(--ink))" }}>Winners so far</span>
-            <div style={{ display: "flex", gap: 18, flexWrap: "wrap" }}>
-              {winnersList.map(({ person, count }) =>
-            <div key={person?.id} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <Avatar person={person} />
-                  <div>
-                    <div style={{ fontFamily: "var(--font-display)", fontSize: 18, lineHeight: 1 }}>{person?.name}</div>
-                    <div className="muted" style={{ fontSize: 11 }}>{count} bottle{count === 1 ? "" : "s"}</div>
-                  </div>
-                </div>
-            )}
-            </div>
-          </div>
-        </div>
-      }
-
       {/* Card grid */}
       <div className="lottery-stage" style={{ position: "relative" }}>
         <div className="lot-grid" style={{ gridTemplateColumns: `repeat(${dims.cols}, 1fr)` }}>
@@ -468,6 +450,21 @@ function LotteryPage({ state, dispatch, setRoute, showToast }) {
           })}
         </div>
       </div>
+
+      {/* Winners summary */}
+      {winnersList.length > 0 &&
+      <div className="card" style={{ marginTop: 18, display: "flex", alignItems: "center", gap: 12, padding: "8px 14px", flexWrap: "wrap", background: "color-mix(in oklab, var(--gold) 8%, var(--paper))" }}>
+          <span className="eyebrow" style={{ fontSize: 10, color: "color-mix(in oklab, var(--gold) 60%, var(--ink))" }}>Winners so far</span>
+          <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+            {winnersList.map(({ person, count }) =>
+          <div key={person?.id} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13 }}>
+                <span style={{ fontFamily: "var(--font-display)", fontSize: 14 }}>{person?.name}</span>
+                <span className="muted" style={{ fontSize: 11 }}>×{count}</span>
+              </div>
+          )}
+          </div>
+        </div>
+      }
 
       {/* Reveal overlay */}
       {phase === "reveal" && winnerCard &&
